@@ -1,13 +1,15 @@
 from core.classes import TarefasClas
+import sqlite3
 def add_tafs(tabwiew):
     
-    abrt = open("tarefas.txt", "rt", encoding="UTF-8")
+    db = sqlite3.connect("tarefas.db")
+    cur = db.cursor()
+    cur.execute("SELECT * FROM tarefas")
+    dados = cur.fetchall()
+    db.close()
 
     try:
-        for n, i in enumerate(abrt):
-            sep = i.rstrip()
-            sep = sep.split(";")
-            
-            TarefasClas(desc=sep[1], titulo=sep[0], tabview=tabwiew)
+        for i in dados:
+            TarefasClas(desc=i[1], titulo=i[0], tabview=tabwiew)
     except IndexError:
         return

@@ -19,12 +19,14 @@ def verificar_digitados(pagina):
     return True
 
 def veri_igu(tit):
+    import sqlite3
 
-    abrt = open("tarefas.txt", "r", encoding="UTF-8")
-
-    for l in abrt:
-        taf = l.rstrip().split(";")
-        
-        if taf[0] == tit:
+    db = sqlite3.connect("tarefas.db")
+    cur = db.cursor()
+    cur.execute("SELECT * FROM tarefas")
+    dados = cur.fetchall()
+    for i in dados:
+        if tit == i[0]:
             return True
     return False
+        

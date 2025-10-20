@@ -12,8 +12,12 @@ def canc(page):
 def apa_td(tabview):
     for i in tabview.winfo_children():
         i.destroy()
-        with open("tarefas.txt", "w") as arq:
-            pass
+    import sqlite3
+    db = sqlite3.connect("tarefas.db")
+    cur = db.cursor()
+    cur.execute("DELETE FROM tarefas")
+    db.commit()
+    db.close()
 
 def apa_unic(tit, tab):
     for w in tab.winfo_children():
@@ -22,19 +26,12 @@ def apa_unic(tit, tab):
                 if wid.cget("text") == tit:
                     w.destroy()
 
-                    tarefas = list()
-                    abrt = open("tarefas.txt", "r", encoding="UTF-8")
-                    for l in abrt:
-                        tarefas.append(l.rstrip().split(";"))
-
-                    for n, _ in enumerate(tarefas):
-                        if tarefas[n][0] == wid.cget("text"):
-                            tarefas.remove(tarefas[n])
-                            break
-                    
-                    abrt2 = open("tarefas.txt", "w", encoding="UTF-8")
-                    for _, i in enumerate(tarefas):
-                        abrt2.write(f"{i[0]};{i[1]}\n")
+                    import sqlite3
+                    db = sqlite3.connect("tarefas.db")
+                    cur = db.cursor()
+                    cur.execute(f"DELETE FROM tarefas WHERE titulo = ?;", (tit,))
+                    db.commit()
+                    db.close()
 
                     return
                 else:

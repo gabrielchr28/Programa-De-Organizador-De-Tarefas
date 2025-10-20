@@ -1,7 +1,6 @@
-def add(page):
-    import customtkinter as ctk
-    from tkinter import messagebox
-    erro = False
+import customtkinter as ctk
+import sqlite3
+def add(page: ctk.CTk):
     for wid in page.winfo_children():
 
         if isinstance(wid, ctk.CTkEntry):
@@ -12,6 +11,8 @@ def add(page):
 
             texto = wid.get("0.0", "end")
     else:
-        with open("tarefas.txt", "a", encoding="UTF-8") as taf:
-
-            taf.write(f"{titulo};{texto}")
+        db = sqlite3.connect("tarefas.db")
+        cur = db.cursor()
+        cur.execute(f"INSERT INTO tarefas VALUES('{titulo}', '{texto}')")
+        db.commit()
+        db.close
